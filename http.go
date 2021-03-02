@@ -23,6 +23,10 @@ var (
 func NewHTTPClient(cfg *config.Backend) client.HTTPClientFactory {
 	_, ok := cfg.ExtraConfig[Namespace]
 	if !ok {
+		insecure := cfg.InsecureSkipVerify
+		if insecure {
+			return client.NewInsecureHTTPClient
+		}
 		return client.NewHTTPClient
 	}
 	return func(_ context.Context) *http.Client {
